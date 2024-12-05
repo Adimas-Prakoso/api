@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
-    secure: true,
+    secure: false,
     auth: {
         user: 'adimasdevs@gmail.com',
         pass: 'fmrrdckwkqcemfbv' // Use App Password, not regular password
