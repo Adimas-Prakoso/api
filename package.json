@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "backend for my application",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adimas-Prakoso/api.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "Adimas Prakoso",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adimas-Prakoso/api/issues"
+  },
+  "homepage": "https://github.com/Adimas-Prakoso/api#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "nodemailer": "^6.9.16"
+  }
+}
