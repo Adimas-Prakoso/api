@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
-    secure: false,
+    secure: true,
     auth: {
         user: 'adimasdevs@gmail.com',
         pass: 'fmrrdckwkqcemfbv' // Use App Password, not regular password
@@ -44,7 +44,7 @@ app.post('/send-email', async (req, res) => {
 
         // Email options
         const mailOptions = {
-            from: `Perpustakaan <${process.env.EMAIL_USER}>`,
+            from: `E-Perpustakaan App`,
             to: to,
             subject: subject,
             html: htmlContent
