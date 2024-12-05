@@ -71,7 +71,6 @@ app.post('/send-email', async (req, res) => {
 app.get('/', (req, res) => {
     res.json({ 
         message: 'API is running',
-        emailConfigured: true
     });
 });
 
