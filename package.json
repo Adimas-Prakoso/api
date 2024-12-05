@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Adimas-Prakoso/api#readme",
   "dependencies": {
     "body-parser": "^1.20.3",
-    "dotenv": "^16.4.7",
+    "cors": "^2.8.5",
     "express": "^4.21.1",
     "nodemailer": "^6.9.16"
   }
