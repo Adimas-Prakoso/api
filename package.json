@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "backend for my application",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "node index.js"
@@ -21,9 +22,8 @@
   },
   "homepage": "https://github.com/Adimas-Prakoso/api#readme",
   "dependencies": {
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "express": "^4.21.1",
+    "@fastify/cors": "^8.4.1",
+    "fastify": "^4.24.3",
     "nodemailer": "^6.9.16"
   }
 }

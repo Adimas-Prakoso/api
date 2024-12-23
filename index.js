@@ -1,66 +1,25 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import { sendEmail } from './lib/sendMail.js';
 
-const app = express();
+const fastify = Fastify({
+    logger: true
+});
 const port = 8000;
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
-
-// Create transporter for sending emails
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: 'adimasdevs@gmail.com',
-        pass: 'fmrrdckwkqcemfbv' // Use App Password, not regular password
-    }
-});
-
-// Verify transporter configuration
-transporter.verify(function (error, success) {
-    if (error) {
-        console.log('Error with email configuration:', error);
-    } else {
-        console.log('Email server is ready to send messages');
-    }
+await fastify.register(cors, { 
+    origin: true
 });
 
 // API endpoint for sending HTML email
-app.post('/send-email', async (req, res) => {
+fastify.post('/send-email', async (request, reply) => {
     try {
-        const { to, subject, htmlContent } = req.body;
-
-        // Validate required fields
-        if (!to || !subject || !htmlContent) {
-            return res.status(400).json({ 
-                error: 'Missing required fields: to, subject, and htmlContent are required' 
-            });
-        }
-
-        // Email options
-        const mailOptions = {
-            from: `adimasdevs@gmail.com`,
-            to: to,
-            subject: subject,
-            html: htmlContent
-        };
-
-        // Send email
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: %s', info.messageId);
-
-        res.status(200).json({ 
-            message: 'Email sent successfully',
-            messageId: info.messageId
-        });
+        const result = await sendEmail(request.body);
+        return reply.code(200).send(result);
     } catch (error) {
         console.error('Error sending email:', error);
-        res.status(500).json({ 
+        return reply.code(500).send({ 
             error: 'Failed to send email',
             details: error.message 
         });
@@ -68,13 +27,15 @@ app.post('/send-email', async (req, res) => {
 });
 
 // Test route
-app.get('/', (req, res) => {
-    res.json({ 
-        message: 'API is running',
-    });
+fastify.get('/', async (request, reply) => {
+    return { message: 'Fastify API is running' };
 });
 
 // Start server
-app.listen(port, () => {
+try {
+    await fastify.listen({ port: port, host: '0.0.0.0' });
     console.log(`Server is running on port ${port}`);
-});
+} catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+}
