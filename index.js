@@ -44,7 +44,7 @@ app.post('/send-email', async (req, res) => {
 
         // Email options
         const mailOptions = {
-            from: `E-Perpustakaan App`,
+            from: `adimasdevs@gmail.com`,
             to: to,
             subject: subject,
             html: htmlContent
@@ -77,5 +77,4 @@ app.get('/', (req, res) => {
 // Start server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log('Email user configured:', process.env.EMAIL_USER ? 'Yes' : 'No');
 });
