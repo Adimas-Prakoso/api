@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import { sendEmail } from './lib/sendMail.js';
+import { sendEmail } from './src/sendMail.js';
 
 const fastify = Fastify({
     logger: true
