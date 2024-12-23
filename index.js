@@ -5,7 +5,6 @@ import { sendEmail } from './src/sendMail.js';
 const fastify = Fastify({
     logger: true
 });
-const port = 8000;
 
 // Middleware
 await fastify.register(cors, { 
@@ -31,11 +30,19 @@ fastify.get('/', async (request, reply) => {
     return { message: 'Fastify API is running' };
 });
 
-// Start server
-try {
-    await fastify.listen({ port: port, host: '0.0.0.0' });
-    console.log(`Server is running on port ${port}`);
-} catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    try {
+        await fastify.listen({ port: 8000, host: '0.0.0.0' });
+        console.log(`Server is running on port 8000`);
+    } catch (err) {
+        fastify.log.error(err);
+        process.exit(1);
+    }
+}
+
+// For Vercel serverless deployment
+export default async function handler(req, res) {
+    await fastify.ready();
+    fastify.server.emit('request', req, res);
 }
