@@ -73,13 +73,21 @@ fastify.get('/', async (request, reply) => {
     return reply.sendFile('index.html');
 });
 
-// Start server
-try {
-    await fastify.listen({ 
-        port: process.env.PORT || 8000,
-        host: '0.0.0.0'  // Penting untuk deployment
-    });
-} catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
+// Start local server if not in Vercel
+if (!process.env.VERCEL) {
+    try {
+        await fastify.listen({ 
+            port: process.env.PORT || 8000,
+            host: '0.0.0.0'
+        });
+    } catch (err) {
+        fastify.log.error(err);
+        process.exit(1);
+    }
+}
+
+// Export handler for Vercel
+export default async function handler(req, res) {
+    await fastify.ready();
+    fastify.server.emit('request', req, res);
 }
