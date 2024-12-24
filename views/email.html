@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Service API Documentation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -26,83 +27,134 @@
             padding: 40px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4299e1;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+        .home-link:hover {
+            color: #2b6cb0;
+        }
         h1 {
             color: #2d3748;
             margin-bottom: 30px;
             font-size: 2.5rem;
             text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: #4299e1;
+            border-radius: 2px;
         }
         .section {
             margin-bottom: 40px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
         }
         h2 {
-            color: #4a5568;
+            color: #2b6cb0;
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
         .endpoint {
-            background: #f7fafc;
+            background: white;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
-            border-left: 4px solid #4299e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .endpoint h3 {
-            color: #2b6cb0;
-            margin-bottom: 15px;
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+        .post {
+            background: #c6f6d5;
+            color: #22543d;
         }
         code {
-            background: #edf2f7;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        pre {
             background: #2d3748;
             color: #e2e8f0;
             padding: 15px;
             border-radius: 8px;
-            overflow-x: auto;
+            display: block;
             margin: 15px 0;
+            overflow-x: auto;
         }
         .parameters {
-            margin: 15px 0;
+            margin: 20px 0;
         }
         .parameter {
-            display: flex;
-            margin-bottom: 10px;
-            padding: 10px;
             background: #f7fafc;
-            border-radius: 6px;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
         }
         .parameter strong {
             min-width: 120px;
             color: #4a5568;
         }
-        .example {
+        .response-codes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
             margin-top: 20px;
         }
-        .method {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin-right: 8px;
+        .response-code {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
         }
-        .post {
-            background: #48bb78;
-            color: white;
+        .response-code strong {
+            display: block;
+            color: #2b6cb0;
+            margin-bottom: 5px;
         }
-        .home-link {
-            display: inline-block;
-            margin-bottom: 20px;
+        .notes {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+        .notes h3 {
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+        .notes ul {
+            list-style-type: none;
+        }
+        .notes li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .notes li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
             color: #4299e1;
-            text-decoration: none;
-        }
-        .home-link:hover {
-            text-decoration: underline;
         }
         @media (max-width: 768px) {
             .container {
@@ -122,77 +174,83 @@
 </head>
 <body>
     <div class="container">
-        <a href="/" class="home-link">← Back to Home</a>
+        <a href="/" class="home-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
         <h1>📧 Email Service API Documentation</h1>
         
         <div class="section">
             <h2>Send Email Endpoint</h2>
             
             <div class="endpoint">
-                <h3>Send Email</h3>
                 <span class="method post">POST</span>
                 <code>/send-email</code>
                 
                 <div class="parameters">
-                    <h4>Request Body Parameters:</h4>
+                    <h3>Request Body Parameters:</h3>
                     <div class="parameter">
                         <strong>to</strong>
-                        <span>Recipient email address</span>
+                        <span>Recipient email address (required)</span>
                     </div>
                     <div class="parameter">
                         <strong>subject</strong>
-                        <span>Email subject line</span>
+                        <span>Email subject line (required)</span>
                     </div>
                     <div class="parameter">
                         <strong>text</strong>
-                        <span>Plain text content of the email</span>
+                        <span>Plain text content of the email (required)</span>
                     </div>
                     <div class="parameter">
                         <strong>html</strong>
-                        <span>(Optional) HTML content of the email</span>
+                        <span>HTML content of the email (optional)</span>
                     </div>
                 </div>
 
                 <div class="example">
-                    <h4>Example Request:</h4>
-                    <pre>{
+                    <h3>Example Request:</h3>
+                    <code>{
   "to": "recipient@example.com",
   "subject": "Test Email",
   "text": "This is a test email",
   "html": "<h1>This is a test email</h1><p>With HTML formatting</p>"
-}</pre>
+}</code>
                     
-                    <h4>Example Response:</h4>
-                    <pre>{
+                    <h3>Example Response:</h3>
+                    <code>{
   "success": true,
   "message": "Email sent successfully"
-}</pre>
+}</code>
                 </div>
             </div>
         </div>
 
         <div class="section">
             <h2>Response Codes</h2>
-            <div class="parameter">
-                <strong>200</strong>
-                <span>Success - Email sent successfully</span>
-            </div>
-            <div class="parameter">
-                <strong>400</strong>
-                <span>Bad Request - Missing required parameters</span>
-            </div>
-            <div class="parameter">
-                <strong>500</strong>
-                <span>Server Error - Failed to send email</span>
+            <div class="response-codes">
+                <div class="response-code">
+                    <strong>200 Success</strong>
+                    <span>Email sent successfully</span>
+                </div>
+                <div class="response-code">
+                    <strong>400 Bad Request</strong>
+                    <span>Missing required parameters</span>
+                </div>
+                <div class="response-code">
+                    <strong>500 Server Error</strong>
+                    <span>Failed to send email</span>
+                </div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Notes</h2>
-            <ul style="list-style: none; padding-left: 0;">
-                <li style="margin-bottom: 10px;">• All fields except 'html' are required</li>
-                <li style="margin-bottom: 10px;">• The 'html' field is optional but recommended for better email formatting</li>
-                <li style="margin-bottom: 10px;">• Emails are sent using NodeMailer with SMTP</li>
+        <div class="notes">
+            <h3>Important Notes</h3>
+            <ul>
+                <li>All fields except 'html' are required</li>
+                <li>The 'html' field is optional but recommended for better email formatting</li>
+                <li>Emails are sent using NodeMailer with SMTP</li>
+                <li>Make sure to handle the response appropriately in your application</li>
             </ul>
         </div>
     </div>

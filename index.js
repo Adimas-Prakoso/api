@@ -152,6 +152,53 @@ fastify.get('/scraping', async (request, reply) => {
     return reply.sendFile('scraping.html');
 });
 
+// Show Image From Url
+fastify.get('/image', async (request, reply) => {
+    try {
+        const { url } = request.query;
+        
+        if (!url) {
+            return reply.code(400).send({
+                error: 'URL gambar diperlukan'
+            });
+        }
+
+        // Decode URL jika mengandung karakter khusus
+        const decodedUrl = decodeURIComponent(url.replace(/^@/, ''));
+
+        try {
+            // Validasi URL
+            new URL(decodedUrl);
+            
+            // Fetch gambar
+            const response = await fetch(decodedUrl);
+            
+            if (!response.ok) {
+                throw new Error('Gagal mengambil gambar');
+            }
+
+            // Dapatkan content-type dari response
+            const contentType = response.headers.get('content-type');
+            
+            // Set header untuk response
+            reply.header('Content-Type', contentType);
+            
+            // Stream gambar langsung ke response
+            return reply.send(response.body);
+
+        } catch (error) {
+            return reply.code(400).send({
+                error: 'Gagal mengambil gambar atau URL tidak valid'
+            });
+        }
+    } catch (error) {
+        return reply.code(500).send({
+            error: 'Gagal memproses permintaan gambar',
+            details: error.message
+        });
+    }
+});
+
 // Root documentation
 fastify.get('/', async (request, reply) => {
     return reply.sendFile('index.html');

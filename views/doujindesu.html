@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doujindesu API Documentation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -26,123 +27,177 @@
             padding: 40px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #4299e1;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+        .home-link:hover {
+            color: #2b6cb0;
+        }
         h1 {
             color: #2d3748;
             margin-bottom: 30px;
             font-size: 2.5rem;
             text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: #4299e1;
+            border-radius: 2px;
         }
         .section {
             margin-bottom: 40px;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
         }
         h2 {
-            color: #4a5568;
+            color: #2b6cb0;
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
         .endpoint {
-            margin-bottom: 15px;
-            border: 1px solid #e2e8f0;
+            background: white;
             border-radius: 8px;
-            background-color: #f8fafc;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
         }
         .endpoint-header {
             display: flex;
             align-items: center;
-            padding: 15px 20px;
-            cursor: pointer;
-            user-select: none;
-            background-color: #fff;
+            padding: 15px;
+            background: #f8fafc;
             border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         .endpoint-header:hover {
-            background-color: #f1f5f9;
+            background: #edf2f7;
         }
         .endpoint-header h3 {
             margin: 0;
+            color: #2b6cb0;
             font-size: 1.1em;
-            color: #2563eb;
-            min-width: 150px;
+            flex: 1;
         }
-        .endpoint-content {
-            display: none;
-            padding: 20px;
-            border-top: 1px solid #e2e8f0;
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-right: 10px;
         }
-        .endpoint-content.show {
-            display: block;
+        .get {
+            background: #e9f6fe;
+            color: #2b6cb0;
+        }
+        .endpoint-url {
+            font-family: monospace;
+            padding: 4px 8px;
+            background: #edf2f7;
+            border-radius: 4px;
+            color: #4a5568;
+            margin: 0 10px;
         }
         .collapse-icon {
-            margin-left: auto;
-            font-size: 18px;
-            color: #64748b;
+            color: #718096;
             transition: transform 0.3s ease;
         }
         .collapse-icon.rotated {
             transform: rotate(180deg);
         }
-        .method {
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 0.85em;
-            font-weight: 600;
-            margin: 0 15px;
-            min-width: 60px;
-            text-align: center;
+        .endpoint-content {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #e2e8f0;
         }
-        .get {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        .endpoint-url {
-            font-family: monospace;
-            color: #475569;
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 4px;
-            margin-right: 15px;
-            flex-grow: 1;
+        .endpoint-content.show {
+            display: block;
         }
         code {
-            background: #edf2f7;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.9em;
-        }
-        pre {
             background: #2d3748;
             color: #e2e8f0;
             padding: 15px;
             border-radius: 8px;
-            overflow-x: auto;
+            display: block;
             margin: 15px 0;
+            overflow-x: auto;
         }
         .parameters {
-            margin: 15px 0;
+            margin: 20px 0;
         }
         .parameter {
-            display: flex;
-            margin-bottom: 10px;
-            padding: 10px;
             background: #f7fafc;
-            border-radius: 6px;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
         }
         .parameter strong {
             min-width: 120px;
             color: #4a5568;
         }
-        .example {
+        .response-codes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
             margin-top: 20px;
         }
-        .home-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #4299e1;
-            text-decoration: none;
+        .response-code {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
         }
-        .home-link:hover {
-            text-decoration: underline;
+        .response-code strong {
+            display: block;
+            color: #2b6cb0;
+            margin-bottom: 5px;
+        }
+        .notes {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+        .notes h3 {
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+        .notes ul {
+            list-style-type: none;
+        }
+        .notes li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .notes li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #4299e1;
         }
         @media (max-width: 768px) {
             .container {
@@ -157,13 +212,24 @@
             .parameter strong {
                 margin-bottom: 5px;
             }
+            .endpoint-header {
+                flex-wrap: wrap;
+            }
+            .endpoint-url {
+                width: 100%;
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="/" class="home-link">← Back to Home</a>
-        <h1>🎯 Doujindesu API Documentation</h1>
+        <a href="/" class="home-link">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        
+        <h1>📚 Doujindesu API Documentation</h1>
         
         <div class="section">
             <h2>Available Endpoints</h2>
@@ -173,12 +239,12 @@
                     <h3>Search by Type</h3>
                     <span class="method get">GET</span>
                     <span class="endpoint-url">/doujindesu/searchtype</span>
-                    <span class="collapse-icon">▼</span>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
                 </div>
                 
                 <div class="endpoint-content">
                     <div class="parameters">
-                        <h4>Query Parameters:</h4>
+                        <h3>Query Parameters:</h3>
                         <div class="parameter">
                             <strong>page</strong>
                             <span>Page number (default: 1)</span>
@@ -190,12 +256,11 @@
                     </div>
 
                     <div class="example">
-                        <h4>Example Requests:</h4>
-                        <code>GET /doujindesu/searchtype</code>
+                        <h3>Example Requests:</h3>
                         <code>GET /doujindesu/searchtype?page=1&type=Manhwa</code>
                         
-                        <h4>Example Response:</h4>
-                        <pre>{
+                        <h3>Example Response:</h3>
+                        <code>{
   "data": [
     {
       "thumbnail": "https://doujindesu.tv/uploads/xxxx.jpg",
@@ -203,10 +268,9 @@
       "type": "Manhwa",
       "chapter": "Chapter 1",
       "updateTime": "NEW"
-    },
-    // ... more items
+    }
   ]
-}</pre>
+}</code>
                     </div>
                 </div>
             </div>
@@ -216,50 +280,48 @@
                     <h3>Search Doujin</h3>
                     <span class="method get">GET</span>
                     <span class="endpoint-url">/doujindesu/search</span>
-                    <span class="collapse-icon">▼</span>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
                 </div>
                 
                 <div class="endpoint-content">
                     <div class="parameters">
-                        <h4>Query Parameters:</h4>
+                        <h3>Query Parameters:</h3>
                         <div class="parameter">
                             <strong>page</strong>
-                            <span>Nomor halaman (default: 1)</span>
+                            <span>Page number (default: 1)</span>
                         </div>
                         <div class="parameter">
                             <strong>title</strong>
-                            <span>Judul doujin</span>
+                            <span>Title to search for</span>
                         </div>
                         <div class="parameter">
                             <strong>author</strong>
-                            <span>Nama author</span>
+                            <span>Author name</span>
                         </div>
                         <div class="parameter">
                             <strong>character</strong>
-                            <span>Nama karakter</span>
+                            <span>Character name</span>
                         </div>
                         <div class="parameter">
                             <strong>status</strong>
-                            <span>Status doujin (contoh: Publishing)</span>
+                            <span>Publication status (e.g., Publishing)</span>
                         </div>
                         <div class="parameter">
                             <strong>type</strong>
-                            <span>Tipe doujin (contoh: Manga)</span>
+                            <span>Content type (e.g., Manga)</span>
                         </div>
                         <div class="parameter">
                             <strong>genre</strong>
-                            <span>Genre dalam format array [genre1, genre2] atau comma-separated genre1,genre2</span>
+                            <span>Genres as array [genre1,genre2] or comma-separated string</span>
                         </div>
                     </div>
 
                     <div class="example">
-                        <h4>Example Requests:</h4>
-                        <code>GET /doujindesu/search</code>
-                        <code>GET /doujindesu/search?title=example&type=Manga</code>
-                        <code>GET /doujindesu/search?title=example&type=Manga&genre=[Ahegao,Romance]</code>
+                        <h3>Example Requests:</h3>
+                        <code>GET /doujindesu/search?title=example&type=Manga&genre=[Romance,Action]</code>
                         
-                        <h4>Example Response:</h4>
-                        <pre>{
+                        <h3>Example Response:</h3>
+                        <code>{
   "data": [
     {
       "thumbnail": "https://doujindesu.tv/uploads/xxxx.jpg",
@@ -267,10 +329,9 @@
       "type": "Manga",
       "rating": "4.5",
       "status": "Publishing"
-    },
-    // ... more items
+    }
   ]
-}</pre>
+}</code>
                     </div>
                 </div>
             </div>
@@ -278,26 +339,30 @@
 
         <div class="section">
             <h2>Response Codes</h2>
-            <div class="parameter">
-                <strong>200</strong>
-                <span>Success - Returns array of manga/doujin data</span>
-            </div>
-            <div class="parameter">
-                <strong>400</strong>
-                <span>Bad Request - Invalid parameters</span>
-            </div>
-            <div class="parameter">
-                <strong>500</strong>
-                <span>Server Error - Something went wrong on the server</span>
+            <div class="response-codes">
+                <div class="response-code">
+                    <strong>200 Success</strong>
+                    <span>Returns array of manga/doujin data</span>
+                </div>
+                <div class="response-code">
+                    <strong>400 Bad Request</strong>
+                    <span>Invalid parameters provided</span>
+                </div>
+                <div class="response-code">
+                    <strong>500 Server Error</strong>
+                    <span>Failed to fetch data from source</span>
+                </div>
             </div>
         </div>
 
-        <div class="section">
-            <h2>Notes</h2>
-            <ul style="list-style: none; padding-left: 0;">
-                <li style="margin-bottom: 10px;">• Results are paginated with 20 items per page</li>
-                <li style="margin-bottom: 10px;">• The type parameter is case-sensitive</li>
-                <li style="margin-bottom: 10px;">• Data is scraped in real-time from doujindesu.tv</li>
+        <div class="notes">
+            <h3>Important Notes</h3>
+            <ul>
+                <li>Results are paginated with 20 items per page</li>
+                <li>The type parameter is case-sensitive</li>
+                <li>Data is scraped in real-time from doujindesu.tv</li>
+                <li>Genre parameter accepts both array and comma-separated formats</li>
+                <li>All parameters except page are optional for search endpoint</li>
             </ul>
         </div>
     </div>
@@ -310,9 +375,6 @@
                 const header = endpoint.querySelector('.endpoint-header');
                 const content = endpoint.querySelector('.endpoint-content');
                 const icon = endpoint.querySelector('.collapse-icon');
-                
-                // Default state is collapsed
-                content.classList.remove('show');
                 
                 header.addEventListener('click', () => {
                     content.classList.toggle('show');
