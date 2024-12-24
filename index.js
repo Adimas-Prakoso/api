@@ -171,7 +171,11 @@ fastify.get('/image', async (request, reply) => {
             new URL(decodedUrl);
             
             // Fetch gambar
-            const response = await fetch(decodedUrl);
+            const response = await fetch(decodedUrl, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                }
+            });
             
             if (!response.ok) {
                 throw new Error('Gagal mengambil gambar');
@@ -180,18 +184,31 @@ fastify.get('/image', async (request, reply) => {
             // Dapatkan content-type dari response
             const contentType = response.headers.get('content-type');
             
-            // Set header untuk response
-            reply.header('Content-Type', contentType);
-            
+            // Validasi content-type untuk memastikan ini adalah gambar
+            if (!contentType || !contentType.startsWith('image/')) {
+                return reply.code(400).send({
+                    error: 'URL yang diberikan bukan file gambar'
+                });
+            }
+
+            // Set headers untuk caching dan content-type
+            reply
+                .header('Content-Type', contentType)
+                .header('Cache-Control', 'public, max-age=86400') // Cache selama 24 jam
+                .header('Access-Control-Allow-Origin', '*');
+
             // Stream gambar langsung ke response
             return reply.send(response.body);
 
         } catch (error) {
+            console.error('Error fetching image:', error);
             return reply.code(400).send({
-                error: 'Gagal mengambil gambar atau URL tidak valid'
+                error: 'Gagal mengambil gambar atau URL tidak valid',
+                details: error.message
             });
         }
     } catch (error) {
+        console.error('Server error:', error);
         return reply.code(500).send({
             error: 'Gagal memproses permintaan gambar',
             details: error.message
