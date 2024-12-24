@@ -1,7 +1,11 @@
 {
     "version": 2,
-    "framework": "node",
-    "outputDirectory": ".",
+    "builds": [
+        {
+            "src": "index.js",
+            "use": "@vercel/node"
+        }
+    ],
     "routes": [
         {
             "src": "/views/(.*)",
