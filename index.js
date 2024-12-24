@@ -1,7 +1,8 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { sendEmail } from './src/sendMail.js';
-import { getAllDoujindesu } from './src/doujindesu.js';
+import { getTypeDoujindesu, searchDoujin } from './src/doujindesu.js';
+import { scrapeWebsite } from './src/scraping.js';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import fastifyStatic from '@fastify/static';
@@ -52,12 +53,12 @@ fastify.get('/doujindesu', async (request, reply) => {
     return reply.sendFile('doujindesu.html');
 });
 
-// Get New Upload Doujinshi From Doujindesu.tv
+// Search By Type From Doujindesu.tv
 fastify.get('/doujindesu/searchtype', async (request, reply) => {
     try {
         const page = parseInt(request.query.page) || 1;
         const type = request.query.type || 'Doujinshi';
-        const data = await getAllDoujindesu(page, type);
+        const data = await getTypeDoujindesu(page, type);
         return reply.code(200).send(data);
     } catch (error) {
         console.error('Error getting doujindesu data:', error);
@@ -66,6 +67,89 @@ fastify.get('/doujindesu/searchtype', async (request, reply) => {
             details: error.message 
         });
     }
+});
+
+// Search Doujin From Doujindesu.tv
+fastify.get('/doujindesu/search', async (request, reply) => {
+    try {
+        let page = 1;
+        if (request.query.page && !isNaN(parseInt(request.query.page))) {
+            page = parseInt(request.query.page);
+        }
+
+        const genreString = request.query.genre || '';
+        // Convert genre string to array and clean it
+        const genres = genreString
+            .replace(/[\[\]]/g, '') // Remove square brackets
+            .split(',')
+            .map(g => g.trim())
+            .filter(g => g !== ''); // Remove empty strings
+
+        console.log('Page:', page); // Debug log
+        console.log('Received genres:', genres); // Debug log
+
+        const query = {
+            title: request.query.title || '',
+            author: request.query.author || '',
+            character: request.query.character || '',
+            status: request.query.status || '',
+            type: request.query.type || '',
+            genre: genres
+        };
+
+        console.log('Search query:', query); // Debug log
+        const data = await searchDoujin(page, query);
+        return reply.code(200).send(data);
+    } catch (error) {
+        console.error('Error searching doujindesu:', error);
+        return reply.code(500).send({
+            error: 'Failed to search doujindesu',
+            details: error.message
+        });
+    }
+});
+
+// Scraping Api
+fastify.post('/scraping', async (request, reply) => {
+    try {
+        const { url } = request.body;
+        
+        if (!url) {
+            return reply.code(400).send({
+                error: 'URL is required'
+            });
+        }
+
+        // Validate URL format
+        try {
+            new URL(url);
+        } catch (error) {
+            return reply.code(400).send({
+                error: 'Invalid URL format'
+            });
+        }
+
+        const result = await scrapeWebsite(url);
+        
+        if (!result.success) {
+            return reply.code(500).send({
+                error: result.error
+            });
+        }
+
+        return reply.code(200).send(result.data);
+    } catch (error) {
+        console.error('Error in scraping endpoint:', error);
+        return reply.code(500).send({
+            error: 'Failed to process scraping request',
+            details: error.message
+        });
+    }
+});
+
+// Dokumentasi Scraping Api
+fastify.get('/scraping', async (request, reply) => {
+    return reply.sendFile('scraping.html');
 });
 
 // Root documentation

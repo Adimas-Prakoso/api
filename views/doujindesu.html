@@ -41,15 +41,67 @@
             font-size: 1.8rem;
         }
         .endpoint {
-            background: #f7fafc;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #4299e1;
-        }
-        .endpoint h3 {
-            color: #2b6cb0;
             margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #f8fafc;
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            user-select: none;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        .endpoint-header:hover {
+            background-color: #f1f5f9;
+        }
+        .endpoint-header h3 {
+            margin: 0;
+            font-size: 1.1em;
+            color: #2563eb;
+            min-width: 150px;
+        }
+        .endpoint-content {
+            display: none;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .endpoint-content.show {
+            display: block;
+        }
+        .collapse-icon {
+            margin-left: auto;
+            font-size: 18px;
+            color: #64748b;
+            transition: transform 0.3s ease;
+        }
+        .collapse-icon.rotated {
+            transform: rotate(180deg);
+        }
+        .method {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 0 15px;
+            min-width: 60px;
+            text-align: center;
+        }
+        .get {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .endpoint-url {
+            font-family: monospace;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-right: 15px;
+            flex-grow: 1;
         }
         code {
             background: #edf2f7;
@@ -82,18 +134,6 @@
         }
         .example {
             margin-top: 20px;
-        }
-        .method {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin-right: 8px;
-        }
-        .get {
-            background: #4299e1;
-            color: white;
         }
         .home-link {
             display: inline-block;
@@ -129,29 +169,33 @@
             <h2>Available Endpoints</h2>
             
             <div class="endpoint">
-                <h3>Search by Type</h3>
-                <span class="method get">GET</span>
-                <code>/doujindesu/searchtype</code>
-                
-                <div class="parameters">
-                    <h4>Query Parameters:</h4>
-                    <div class="parameter">
-                        <strong>page</strong>
-                        <span>Page number (default: 1)</span>
-                    </div>
-                    <div class="parameter">
-                        <strong>type</strong>
-                        <span>Content type (default: Doujinshi). Available: Doujinshi, Manga, Manhwa</span>
-                    </div>
+                <div class="endpoint-header">
+                    <h3>Search by Type</h3>
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/doujindesu/searchtype</span>
+                    <span class="collapse-icon">▼</span>
                 </div>
+                
+                <div class="endpoint-content">
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <strong>page</strong>
+                            <span>Page number (default: 1)</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>type</strong>
+                            <span>Content type (default: Doujinshi). Available: Doujinshi, Manga, Manhwa</span>
+                        </div>
+                    </div>
 
-                <div class="example">
-                    <h4>Example Requests:</h4>
-                    <code>GET /doujindesu/searchtype</code>
-                    <code>GET /doujindesu/searchtype?page=1&type=Manhwa</code>
-                    
-                    <h4>Example Response:</h4>
-                    <pre>{
+                    <div class="example">
+                        <h4>Example Requests:</h4>
+                        <code>GET /doujindesu/searchtype</code>
+                        <code>GET /doujindesu/searchtype?page=1&type=Manhwa</code>
+                        
+                        <h4>Example Response:</h4>
+                        <pre>{
   "data": [
     {
       "thumbnail": "https://doujindesu.tv/uploads/xxxx.jpg",
@@ -163,6 +207,71 @@
     // ... more items
   ]
 }</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <div class="endpoint-header">
+                    <h3>Search Doujin</h3>
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/doujindesu/search</span>
+                    <span class="collapse-icon">▼</span>
+                </div>
+                
+                <div class="endpoint-content">
+                    <div class="parameters">
+                        <h4>Query Parameters:</h4>
+                        <div class="parameter">
+                            <strong>page</strong>
+                            <span>Nomor halaman (default: 1)</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>title</strong>
+                            <span>Judul doujin</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>author</strong>
+                            <span>Nama author</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>character</strong>
+                            <span>Nama karakter</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>status</strong>
+                            <span>Status doujin (contoh: Publishing)</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>type</strong>
+                            <span>Tipe doujin (contoh: Manga)</span>
+                        </div>
+                        <div class="parameter">
+                            <strong>genre</strong>
+                            <span>Genre dalam format array [genre1, genre2] atau comma-separated genre1,genre2</span>
+                        </div>
+                    </div>
+
+                    <div class="example">
+                        <h4>Example Requests:</h4>
+                        <code>GET /doujindesu/search</code>
+                        <code>GET /doujindesu/search?title=example&type=Manga</code>
+                        <code>GET /doujindesu/search?title=example&type=Manga&genre=[Ahegao,Romance]</code>
+                        
+                        <h4>Example Response:</h4>
+                        <pre>{
+  "data": [
+    {
+      "thumbnail": "https://doujindesu.tv/uploads/xxxx.jpg",
+      "title": "Example Title",
+      "type": "Manga",
+      "rating": "4.5",
+      "status": "Publishing"
+    },
+    // ... more items
+  ]
+}</pre>
+                    </div>
                 </div>
             </div>
         </div>
@@ -192,5 +301,25 @@
             </ul>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const endpoints = document.querySelectorAll('.endpoint');
+            
+            endpoints.forEach(endpoint => {
+                const header = endpoint.querySelector('.endpoint-header');
+                const content = endpoint.querySelector('.endpoint-content');
+                const icon = endpoint.querySelector('.collapse-icon');
+                
+                // Default state is collapsed
+                content.classList.remove('show');
+                
+                header.addEventListener('click', () => {
+                    content.classList.toggle('show');
+                    icon.classList.toggle('rotated');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
