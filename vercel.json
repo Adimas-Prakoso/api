@@ -1,17 +1,7 @@
 {
     "version": 2,
-    "builds": [
-        {
-            "src": "index.js",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": [
-                    "views/**",
-                    "src/**"
-                ]
-            }
-        }
-    ],
+    "framework": "node",
+    "outputDirectory": ".",
     "routes": [
         {
             "src": "/views/(.*)",
