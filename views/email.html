@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Service API Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        .endpoint {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4299e1;
+        }
+        .endpoint h3 {
+            color: #2b6cb0;
+            margin-bottom: 15px;
+        }
+        code {
+            background: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .parameters {
+            margin: 15px 0;
+        }
+        .parameter {
+            display: flex;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f7fafc;
+            border-radius: 6px;
+        }
+        .parameter strong {
+            min-width: 120px;
+            color: #4a5568;
+        }
+        .example {
+            margin-top: 20px;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .post {
+            background: #48bb78;
+            color: white;
+        }
+        .home-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .parameter {
+                flex-direction: column;
+            }
+            .parameter strong {
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="home-link">← Back to Home</a>
+        <h1>📧 Email Service API Documentation</h1>
+        
+        <div class="section">
+            <h2>Send Email Endpoint</h2>
+            
+            <div class="endpoint">
+                <h3>Send Email</h3>
+                <span class="method post">POST</span>
+                <code>/send-email</code>
+                
+                <div class="parameters">
+                    <h4>Request Body Parameters:</h4>
+                    <div class="parameter">
+                        <strong>to</strong>
+                        <span>Recipient email address</span>
+                    </div>
+                    <div class="parameter">
+                        <strong>subject</strong>
+                        <span>Email subject line</span>
+                    </div>
+                    <div class="parameter">
+                        <strong>text</strong>
+                        <span>Plain text content of the email</span>
+                    </div>
+                    <div class="parameter">
+                        <strong>html</strong>
+                        <span>(Optional) HTML content of the email</span>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <h4>Example Request:</h4>
+                    <pre>{
+  "to": "recipient@example.com",
+  "subject": "Test Email",
+  "text": "This is a test email",
+  "html": "<h1>This is a test email</h1><p>With HTML formatting</p>"
+}</pre>
+                    
+                    <h4>Example Response:</h4>
+                    <pre>{
+  "success": true,
+  "message": "Email sent successfully"
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Response Codes</h2>
+            <div class="parameter">
+                <strong>200</strong>
+                <span>Success - Email sent successfully</span>
+            </div>
+            <div class="parameter">
+                <strong>400</strong>
+                <span>Bad Request - Missing required parameters</span>
+            </div>
+            <div class="parameter">
+                <strong>500</strong>
+                <span>Server Error - Failed to send email</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Notes</h2>
+            <ul style="list-style: none; padding-left: 0;">
+                <li style="margin-bottom: 10px;">• All fields except 'html' are required</li>
+                <li style="margin-bottom: 10px;">• The 'html' field is optional but recommended for better email formatting</li>
+                <li style="margin-bottom: 10px;">• Emails are sent using NodeMailer with SMTP</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
